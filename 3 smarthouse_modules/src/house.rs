@@ -1,6 +1,7 @@
 use crate::errors::SmartHouseError;
 use crate::room::Room;
 use crate::traits::Report;
+
 #[derive(Clone)]
 pub struct House {
     name: String,
@@ -14,8 +15,8 @@ impl House {
             rooms: vec![],
         }
     }
-    pub fn rooms(&self) -> &Vec<Room> {
-        &self.rooms
+    pub fn rooms(&self) -> impl Iterator<Item = &Room> {
+        self.rooms.iter()
     }
     pub fn add_room(&mut self, room: Room) -> Result<usize, SmartHouseError> {
         if let Some(r) = self.rooms.iter().find(|r| r.name == room.name) {
@@ -67,6 +68,6 @@ mod tests {
 
         let removed = house.remove_room("Test Room".into());
         assert!(removed);
-        assert_eq!(house.rooms().len(), 0);
+        assert_eq!(house.rooms().count(), 0);
     }
 }

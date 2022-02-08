@@ -17,8 +17,8 @@ impl Room {
             devices: vec![],
         }
     }
-    pub fn devices(&self) -> &Vec<Device> {
-        &self.devices
+    pub fn devices(&self) -> impl Iterator<Item = &Device> {
+        self.devices.iter()
     }
     pub fn device(&self, device_name: String) -> Result<&Device, SmartHouseError> {
         if let Some(d) = self.devices.iter().find(|d| d.name == device_name) {
@@ -78,6 +78,6 @@ mod tests {
 
         let removed = room.remove_device("Test device".into());
         assert!(removed);
-        assert_eq!(room.devices().len(), 0);
+        assert_eq!(room.devices().count(), 0);
     }
 }
